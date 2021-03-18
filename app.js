@@ -8,6 +8,7 @@ app.use('/', express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
 let items = [];
+let workItems = [];
 
 app.get('/', function (req, res) {
   let today = new Date();
@@ -19,7 +20,7 @@ app.get('/', function (req, res) {
 
   let day = today.toLocaleDateString('en-US', options);
 
-  res.render('list', { kindOfDay: day, newListItem: items });
+  res.render('list', { listTitle: day, newListItem: items });
 });
 
 app.post('/', function (req, res) {
@@ -28,6 +29,16 @@ app.post('/', function (req, res) {
   items.push(item);
 
   res.redirect('/');
+});
+
+app.get('/work', function (req, res) {
+  res.render('list', { listTitle: 'Work List', newListItem: workItems });
+});
+
+app.post('/work', function (req, res) {
+  let item = req.body.newItem;
+  workItems.push(item);
+  res.redirect('/work');
 });
 
 app.listen(3000, function () {
